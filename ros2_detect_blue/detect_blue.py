@@ -13,8 +13,8 @@ class DetectBlueNode(Node):
     def __init__(self):
         super().__init__('detect_blue')
         self.get_logger().info('detect_blue node is starting')
-
         self.image_sub = self.create_subscription(Image, '/camera', self.image_callback, 1)
+        plt.ion() # Turn on interactive mode
 
     def image_callback(self, msg):
 
@@ -27,7 +27,8 @@ class DetectBlueNode(Node):
 
         # Display the image using matplotlib
         plt.imshow(image)
-        plt.show()
+        plt.draw() # Redraw the plot with the new image
+        plt.pause(0.0001) # Pause to create a video effect
 
 def main(args=None):
     rclpy.init(args=args)
