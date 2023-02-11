@@ -23,5 +23,13 @@ sudo apt-get install python3-numpy
 ## Running the Node
 
 ```bash
-ros2 run ros2_detect_blue detect_blue
+ros2 run ros2_detect_blue detect_blue detection_method:=0
 ```
+
+Table below shows the available detection methods and their corresponding algorithm. An in depth description of the algorithm can be found in subsequent sections.
+
+| Method | Algorithm | Description |
+| --- | --- | --- |
+| 0 | simple_HSV_theshhold| Converts the RGB image to an HSV image and return true if any blue is found within a certain range. |
+
+### Simple HSV Threshold
