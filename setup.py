@@ -15,8 +15,8 @@ setup(
     zip_safe=True,
     maintainer='matt',
     maintainer_email='matthewwilliamlock@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='ros2_detect_blue is a ROS2 package that detects blue objects in an image',
+    license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
