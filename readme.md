@@ -19,3 +19,9 @@ sudo apt-get install python3-opencv
 ```bash
 sudo apt-get install python3-numpy
 ```
+
+## Running the Node
+
+```bash
+ros2 run ros2_detect_blue detect_blue
+```

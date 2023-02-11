@@ -7,14 +7,23 @@ import matplotlib.pyplot as plt
 import cv2
 from sensor_msgs.msg import Image
 
+import ros2_numpy as rnp
+
 class DetectBlueNode(Node):
     def __init__(self):
         super().__init__('detect_blue')
-        self.image_sub = self.create_subscription(Image, '/image', self.image_callback, 1)
+        self.get_logger().info('detect_blue node is starting')
+
+        self.image_sub = self.create_subscription(Image, '/camera', self.image_callback, 1)
 
     def image_callback(self, msg):
+
+        # Log callback 
+        self.get_logger().info('Image received')
+
         # Convert the ROS Image message to a numpy array
-        image = np.frombuffer(msg.data, np.uint8).reshape(msg.height, msg.width, msg.step)
+        image = rnp.numpify(msg)
+        print(image.shape)
 
         # Display the image using matplotlib
         plt.imshow(image)
