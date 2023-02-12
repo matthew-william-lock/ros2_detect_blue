@@ -50,6 +50,7 @@ class BlueDetectionAlgorithm:
 
         # Set the text scale factor to 20% of the image height
         text_scale = 0.002 * height
+        text_scale*= 2
 
         # Add the text to the image
         cv2.putText(image, text, (10, height - 10), cv2.FONT_HERSHEY_SIMPLEX, text_scale, (0, 0, 255), 1)

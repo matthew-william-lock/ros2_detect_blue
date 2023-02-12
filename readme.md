@@ -35,7 +35,7 @@ This will create a simple video feed as shown below. The video feed will show th
 * The image mask
 * The image after the mask has been applied
 
-![image](https://user-images.githubusercontent.com/53016036/218306816-ba07544b-be32-45c4-8354-cc4531af0ead.png)
+<img src="https://user-images.githubusercontent.com/53016036/218306816-ba07544b-be32-45c4-8354-cc4531af0ead.png" width="100%">
 
 Table below shows the available detection methods and their corresponding algorithm. An in depth description of the algorithm can be found in subsequent sections.
 
