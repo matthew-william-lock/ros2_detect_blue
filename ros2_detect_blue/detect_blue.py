@@ -6,6 +6,7 @@ import ros2_numpy as rnp
 
 # Messages
 from sensor_msgs.msg import Image
+from std_msgs.msg import Bool
 
 # Tools
 from .blue_detection_algorithm import BlueDetectionAlgorithm
@@ -24,6 +25,17 @@ class DetectBlueNode(Node):
         self.declare_parameter('detection_method', 0)
         self.detection_method = self.get_parameter('detection_method').value
 
+        # Declare boolean publisher and time to publish every 1 second
+        self.blue_detected = False
+        self.blue_detected_pub = self.create_publisher(Bool, '/blue_detected', 1)
+        self.timer = self.create_timer(1, self.timer_callback)
+
+    def timer_callback(self):
+        # Publish the blue detected boolean
+        msg = Bool()
+        msg.data = self.blue_detected
+        self.blue_detected_pub.publish(msg)
+
     def image_callback(self, msg):
 
         # Log callback 
@@ -31,16 +43,27 @@ class DetectBlueNode(Node):
 
         # Convert the ROS Image message to a numpy array
         image = rnp.numpify(msg)
-
+        image = image[:, :, :3]
         original_image = image.copy()
         
         # Apply the blue detection algorithm
-        # Case 1: Simple HSV thresholding
-        # Default case: Simple HSV thresholding
 
+        # Case 1: Simple HSV thresholding
         if self.detection_method == 0:
+            self.get_logger().info('Using simple HSV thresholding')
             mask, thresholded_image, blue_detected  = BlueDetectionAlgorithm.simple_HSV_theshhold(image=image)
 
+        # Case 2: HSV thresholding wih k-means clustering to remove sky
+        elif self.detection_method == 1:
+            self.get_logger().info('Using HSV thresholding with k-means clustering to remove sky')
+            mask, thresholded_image, blue_detected  = BlueDetectionAlgorithm.simple_HSV_theshhold_with_k_clustering_to_remove_sky(image=image)
+
+        # Case 3: HSV thresholding with k-means and coverage thresholding
+        elif self.detection_method == 2:
+            self.get_logger().info('Using HSV thresholding with k-means and coverage thresholding')
+            mask, thresholded_image, blue_detected  = BlueDetectionAlgorithm.simple_HSV_theshhold_with_k_clustering_and_coverage_thresholding(image=image)
+
+        # Default case: Simple HSV thresholding
         else:
             mask, thresholded_image, blue_detected  = BlueDetectionAlgorithm.simple_HSV_theshhold(image=image)
 
@@ -54,6 +77,14 @@ class DetectBlueNode(Node):
             text = "Blue Detected"
             original_image = BlueDetectionAlgorithm.add_text_to_image(image=original_image, text=text)
 
+        else:
+            text = "No Blue Detected"
+            original_image = BlueDetectionAlgorithm.add_text_to_image(image=original_image, text=text)
+
+        # Change value of blue detected
+        # conver numpy boolean to python boolean
+        blue_detected = bool(blue_detected)
+        self.blue_detected = blue_detected
 
         self.axs[0].imshow(original_image, cmap='gray')
         self.axs[0].set_title("Original Image")
