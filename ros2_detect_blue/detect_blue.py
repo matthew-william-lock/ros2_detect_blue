@@ -48,17 +48,17 @@ class DetectBlueNode(Node):
         
         # Apply the blue detection algorithm
 
-        # Case 1: Simple HSV thresholding
+        # Case 0: Simple HSV thresholding
         if self.detection_method == 0:
             self.get_logger().info('Using simple HSV thresholding')
             mask, thresholded_image, blue_detected  = BlueDetectionAlgorithm.simple_HSV_theshhold(image=image)
 
-        # Case 2: HSV thresholding wih k-means clustering to remove sky
+        # Case 1: HSV thresholding wih k-means clustering to remove sky
         elif self.detection_method == 1:
             self.get_logger().info('Using HSV thresholding with k-means clustering to remove sky')
             mask, thresholded_image, blue_detected  = BlueDetectionAlgorithm.simple_HSV_theshhold_with_k_clustering_to_remove_sky(image=image)
 
-        # Case 3: HSV thresholding with k-means and coverage thresholding
+        # Case 2: HSV thresholding with k-means and coverage thresholding
         elif self.detection_method == 2:
             self.get_logger().info('Using HSV thresholding with k-means and coverage thresholding')
             mask, thresholded_image, blue_detected  = BlueDetectionAlgorithm.simple_HSV_theshhold_with_k_clustering_and_coverage_thresholding(image=image)
